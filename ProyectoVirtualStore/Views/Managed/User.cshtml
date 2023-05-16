@@ -1,0 +1,99 @@
+﻿@using ProyectoNugetVirtualStore.Models;
+@model Usuario
+@{
+
+    var imagen = Context.Session.GetObject<string>("imagenP");
+}
+<section style="margin-top:2rem"  class="pt-16 bg-blueGray-50">
+    <div id="cardsito" class="w-full lg:w-4/12 px-4 mx-auto">
+        <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
+            <div class="px-6">
+                <div class="flex flex-wrap justify-center">
+                    <div >
+                        
+                        <form method="post" enctype="multipart/form-data">
+
+                            @if (Model.Imagen == null)
+                            {
+                                <h2>No tienes Imagen</h2>
+                            }
+                            else
+                            {
+                              <img style="border-radius: 50%; width: 200px; height: 200px;" src="@imagen" />
+
+                            
+                            }
+                            
+                          
+                            <input type="file" name="file" id="fichero">
+                            <button for="fichero" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="submit">
+                                Modificar Imagen
+                            </button>
+                            
+                        </form>
+                    </div>
+                    
+                </div>
+                <div class="text-center mt-12">
+                    <h3 class="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
+                        @Model.NombreUsuario
+                    </h3>
+                    <div class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
+                        <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
+                        @Model.Email
+                    </div>
+                    <div class="mb-2 text-blueGray-600 mt-10">
+                        <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
+                        Madrid , España
+                    </div>
+                    
+                </div>
+              
+            </div>
+        </div>
+    </div>
+    
+</section>
+
+<div style="margin:0 auto">
+    @ViewData["PRUEBA"]
+</div>
+
+<style>
+    #cardsito {
+        width: 100%;
+        
+        max-width: 1026px;
+        margin: 0 auto;
+    }
+
+    .container {
+        max-width: 1026px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background-color: aquamarine;
+        max-width: 1026px;
+        margin: auto;
+    }
+
+
+    .card-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+</style>
+@section Scripts {
+    <script>
+
+       
+
+
+    </script>
+}

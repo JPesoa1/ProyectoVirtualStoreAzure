@@ -1,0 +1,365 @@
+-- Creación de tabla "juegos"
+CREATE TABLE juegos (
+  id_juego INT NOT NULL ,
+  nombre_juego NVARCHAR(60) NOT NULL,
+  descripcion_juego NVARCHAR(255),
+  precio_juego DECIMAL(10,2) NOT NULL,
+  estado NVARCHAR(50),
+  imagen NVARCHAR(200)
+  PRIMARY KEY (id_juego)
+);
+
+-- Creación de tabla "categorias"
+CREATE TABLE categorias (
+  id_categoria INT NOT NULL ,
+  nombre_categoria NVARCHAR(255) NOT NULL,
+  descripcion_categoria NVARCHAR(255),
+  PRIMARY KEY (id_categoria)
+);
+
+-- Creación de tabla intermedia "juegos_categorias"
+CREATE TABLE juegos_categorias (
+  id_juego INT NOT NULL,
+  id_categoria INT NOT NULL,
+  PRIMARY KEY (id_juego, id_categoria),
+  FOREIGN KEY (id_juego) REFERENCES juegos(id_juego),
+  FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);
+
+-- Creación de tabla "compras"
+CREATE TABLE compras (
+  id_compra INT NOT NULL ,
+  id_usuario INT NOT NULL,
+  id_juego INT NOT NULL,
+  fecha_compra DATE NOT NULL,
+  cantidad_comprada INT NOT NULL,
+  PRIMARY KEY (id_compra),
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+  FOREIGN KEY (id_juego) REFERENCES juegos(id_juego)
+);
+
+-- Creación de tabla "usuarios"
+CREATE TABLE usuarios (
+  id_usuario INT NOT NULL ,
+  nombre_usuario NVARCHAR(70) NOT NULL,
+  correo_electronico NVARCHAR(100) NOT NULL,
+  pass VARBINARY(MAX),
+  salt NVARCHAR(50),
+  imagen NVARCHAR(50),
+  PRIMARY KEY (id_usuario)
+);
+
+select * from usuarios where correo_electronico='josepesoa002@gmail.com'
+
+
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+Script Base de datos
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+USE [master]
+GO
+/****** Object:  Database [TIENDAVIRTUAL]    Script Date: 22/03/2023 22:32:58 ******/
+CREATE DATABASE [TIENDAVIRTUAL]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'TIENDAVIRTUAL', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\TIENDAVIRTUAL.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'TIENDAVIRTUAL_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\TIENDAVIRTUAL_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [TIENDAVIRTUAL].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET  MULTI_USER 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET QUERY_STORE = OFF
+GO
+USE [TIENDAVIRTUAL]
+GO
+/****** Object:  Table [dbo].[categorias]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[categorias](
+	[id_categoria] [int] NOT NULL,
+	[nombre_categoria] [nvarchar](255) NOT NULL,
+	[descripcion_categoria] [nvarchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id_categoria] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[comentarios]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[comentarios](
+	[id_comentario] [int] NOT NULL,
+	[id_juego] [int] NOT NULL,
+	[id_usuario] [int] NOT NULL,
+	[comentario] [varchar](80) NOT NULL,
+	[fecha_post] [datetime] NOT NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[compras]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[compras](
+	[id_compra] [int] NOT NULL,
+	[id_usuario] [int] NOT NULL,
+	[id_juego] [int] NOT NULL,
+	[fecha_compra] [date] NOT NULL,
+	[cantidad_comprada] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id_compra] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[favoritos]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[favoritos](
+	[id_usuario] [int] NULL,
+	[id_juego] [int] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[imagenes]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[imagenes](
+	[id_imagen] [int] NOT NULL,
+	[id_juego] [int] NOT NULL,
+	[imagen] [nvarchar](50) NULL,
+ CONSTRAINT [PK_imagenes] PRIMARY KEY CLUSTERED 
+(
+	[id_imagen] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[juegos]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[juegos](
+	[id_juego] [int] NOT NULL,
+	[nombre_juego] [nvarchar](60) NOT NULL,
+	[descripcion_juego] [nvarchar](255) NULL,
+	[precio_juego] [decimal](10, 2) NOT NULL,
+	[estado] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id_juego] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[juegos_categorias]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[juegos_categorias](
+	[id_juego] [int] NOT NULL,
+	[id_categoria] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id_juego] ASC,
+	[id_categoria] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[usuarios]    Script Date: 22/03/2023 22:32:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[usuarios](
+	[id_usuario] [int] NOT NULL,
+	[nombre_usuario] [nvarchar](70) NOT NULL,
+	[correo_electronico] [nvarchar](100) NOT NULL,
+	[pass] [varbinary](max) NULL,
+	[imagen] [nchar](10) NULL,
+	[salt] [nvarchar](50) NULL,
+ CONSTRAINT [PK__usuarios__4E3E04AD5C4C8CEB] PRIMARY KEY CLUSTERED 
+(
+	[id_usuario] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+INSERT [dbo].[categorias] ([id_categoria], [nombre_categoria], [descripcion_categoria]) VALUES (1, N'Aventura', NULL)
+INSERT [dbo].[categorias] ([id_categoria], [nombre_categoria], [descripcion_categoria]) VALUES (2, N'Acción', NULL)
+INSERT [dbo].[categorias] ([id_categoria], [nombre_categoria], [descripcion_categoria]) VALUES (3, N'Deportes', NULL)
+INSERT [dbo].[categorias] ([id_categoria], [nombre_categoria], [descripcion_categoria]) VALUES (4, N'Estrategia', NULL)
+INSERT [dbo].[categorias] ([id_categoria], [nombre_categoria], [descripcion_categoria]) VALUES (5, N'Rol', NULL)
+GO
+INSERT [dbo].[comentarios] ([id_comentario], [id_juego], [id_usuario], [comentario], [fecha_post]) VALUES (1, 6, 6, N'Me gusta mucho el juego , ya que se puede jugar con amigos', CAST(N'2023-03-21T00:00:00.000' AS DateTime))
+INSERT [dbo].[comentarios] ([id_comentario], [id_juego], [id_usuario], [comentario], [fecha_post]) VALUES (2, 6, 6, N'Prueba comentario', CAST(N'2023-03-21T22:44:42.277' AS DateTime))
+INSERT [dbo].[comentarios] ([id_comentario], [id_juego], [id_usuario], [comentario], [fecha_post]) VALUES (3, 6, 6, N'prueba', CAST(N'2023-03-22T18:32:36.813' AS DateTime))
+INSERT [dbo].[comentarios] ([id_comentario], [id_juego], [id_usuario], [comentario], [fecha_post]) VALUES (4, 6, 6, N'prueba jose', CAST(N'2023-03-22T18:40:48.077' AS DateTime))
+INSERT [dbo].[comentarios] ([id_comentario], [id_juego], [id_usuario], [comentario], [fecha_post]) VALUES (5, 6, 6, N'prueba2', CAST(N'2023-03-22T18:43:44.317' AS DateTime))
+GO
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (1, N'Super Mario Bros.', N'Clásico juego de plataformas con Mario y Luigi', CAST(29.99 AS Decimal(10, 2)), N'popular')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (2, N'The Legend of Zelda', N'Aventura épica de Link en busca de la Trifuerza', CAST(39.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (3, N'Minecraft', N'Juego de construcción y aventura', CAST(24.99 AS Decimal(10, 2)), N'popular')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (4, N'Grand Theft Auto V', N'Juego de mundo abierto con misiones y acción', CAST(59.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (5, N'Fortnite', N'Juego de Battle Royale con construcción', CAST(0.00 AS Decimal(10, 2)), N'popular')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (6, N'Among Us', N'Juego multijugador de intriga y engaño', CAST(4.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (7, N'Call of Duty: Warzone', N'Juego de disparos multijugador', CAST(0.00 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (8, N'The Sims 4', N'Juego de simulación de vida', CAST(39.99 AS Decimal(10, 2)), N'establecido')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (9, N'Stardew Valley', N'Juego de simulación de granja y aventura', CAST(14.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (10, N'Animal Crossing: New Horizons', N'Juego de simulación de vida en una isla', CAST(59.99 AS Decimal(10, 2)), N'popular')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (11, N'Overwatch', N'Juego de disparos multijugador con héroes', CAST(39.99 AS Decimal(10, 2)), N'establecido')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (12, N'Red Dead Redemption 2', N'Juego de mundo abierto en el Salvaje Oeste', CAST(49.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (13, N'League of Legends', N'Juego de estrategia multijugador en línea', CAST(0.00 AS Decimal(10, 2)), N'popular')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (14, N'The Elder Scrolls V: Skyrim', N'Juego de rol de mundo abierto con dragones', CAST(39.99 AS Decimal(10, 2)), N'establecido')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (15, N'FIFA 22', N'Juego de simulación de fútbol', CAST(59.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (16, N'Assassin''s Creed Valhalla', N'Juego de aventuras en la era vikinga', CAST(59.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (17, N'World of Warcraft', N'Juego de rol multijugador en línea', CAST(14.99 AS Decimal(10, 2)), N'establecido')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (18, N'Valorant', N'Juego de disparos táctico multijugador en línea', CAST(0.00 AS Decimal(10, 2)), N'popular')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (19, N'Cyberpunk 2077', N'Juego de rol de mundo abierto en el futuro', CAST(49.99 AS Decimal(10, 2)), N'tendencia')
+INSERT [dbo].[juegos] ([id_juego], [nombre_juego], [descripcion_juego], [precio_juego], [estado]) VALUES (20, N'The Witcher 3: Wild Hunt', N'Juego de rol de mundo abierto con monstruos', CAST(39.99 AS Decimal(10, 2)), N'establecido')
+GO
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (1, 1)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (2, 1)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (2, 5)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (3, 1)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (3, 5)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (4, 2)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (4, 5)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (5, 2)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (5, 3)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (6, 2)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (6, 4)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (7, 2)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (8, 1)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (8, 5)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (9, 4)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (9, 5)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (10, 1)
+INSERT [dbo].[juegos_categorias] ([id_juego], [id_categoria]) VALUES (10, 5)
+GO
+INSERT [dbo].[usuarios] ([id_usuario], [nombre_usuario], [correo_electronico], [pass], [imagen], [salt]) VALUES (1, N'JP', N'josepesoa002@gmail.com', 0x0BA1154D636C473E37C7200F4772D4365EBB34F2061456F3ACEFE392E34B789CC38D184E2F4988D25D44C609F477E12D3476C26BB54A9D4DC8763BCDEB582408, NULL, N'{H§r6ÁÈÕ¯M5HÞá±½1´äç/Cz	ý÷Û3Nnx9c')
+INSERT [dbo].[usuarios] ([id_usuario], [nombre_usuario], [correo_electronico], [pass], [imagen], [salt]) VALUES (2, N'AD', N'a@gmail.com', 0xAFF3BC54A4EF3E9C292687B132EDEC479FFEA79DF127B01EFC79C917DF3CE5743C14983F30503363E11510D7FB249619EFEC9824A7EDBB9813774ACFF4E2BE15, NULL, N'p½(=Ãk³SCy]B''½ul¤àzx¨äxRßÊÀÒU­s<P_')
+INSERT [dbo].[usuarios] ([id_usuario], [nombre_usuario], [correo_electronico], [pass], [imagen], [salt]) VALUES (3, N'AD', N'a@gmail.com', 0xC5C08E5E7B3E46661526D43A4186A492C1FACEB313CF9F446D31B33EC6EC2DEFC6117B704179AD5E17D1ECB96A06F84AECB31631CDAA929D4A092FD15983ADC0, NULL, N'}óóDßóQ>8''Hw½ïoTègÏCZ}ç0oúo°Yµ')
+INSERT [dbo].[usuarios] ([id_usuario], [nombre_usuario], [correo_electronico], [pass], [imagen], [salt]) VALUES (4, N'C', N'josepesoa002@gmail.com', 0xCA330F5E536BA687B46A355BD3001203685A0DC8E9ECB452D14305028514BB80461EE8274945F3B9EA0B6194B2CF72F96205722AB7B26D8654A7BE8C1984BA20, NULL, N'BâÇ±î?8bZy8IUô¥ßïÎÄWà¦LWÆööøêk»Í.Wu')
+INSERT [dbo].[usuarios] ([id_usuario], [nombre_usuario], [correo_electronico], [pass], [imagen], [salt]) VALUES (5, N'Z', N'z@gmail.com', 0x3591DCBA58AFA6C0E0CEDAA825FDFE12A5BE801C16928DC633C0FADAEB04DDE3CB098062E38C0FDFCEB9064888AC24B3880D722B5E4DEE2B44277729B330195F, NULL, N'ìk''ÏúÔ:éä_Q ÚêüH¤ÊÕjÉÌÝÙÍ»£¼7£ÑA
+)4 Xs¸BrýÙ!ûÕ')
+INSERT [dbo].[usuarios] ([id_usuario], [nombre_usuario], [correo_electronico], [pass], [imagen], [salt]) VALUES (6, N'jose@gmail.com', N'jose@gmail.com', 0x80E092967AF465A0F586B9AC73EEA23E701207E6F13D8F3F4AEEDEB5F3B1216E7544B06F9C589B70B4DDA2A167298FC6BFFBDE048A52B99AF9566E5B78413921, NULL, N'uº®²Qxpß3ò¤ÑY`À
+ãS¶ò¹´":¹`áªÕî8"¾ %gÎ¸ÀP')
+GO
+ALTER TABLE [dbo].[comentarios]  WITH CHECK ADD  CONSTRAINT [FK_comentarios_juegos] FOREIGN KEY([id_juego])
+REFERENCES [dbo].[juegos] ([id_juego])
+GO
+ALTER TABLE [dbo].[comentarios] CHECK CONSTRAINT [FK_comentarios_juegos]
+GO
+ALTER TABLE [dbo].[comentarios]  WITH CHECK ADD  CONSTRAINT [FK_comentarios_usuarios] FOREIGN KEY([id_usuario])
+REFERENCES [dbo].[usuarios] ([id_usuario])
+GO
+ALTER TABLE [dbo].[comentarios] CHECK CONSTRAINT [FK_comentarios_usuarios]
+GO
+ALTER TABLE [dbo].[compras]  WITH CHECK ADD FOREIGN KEY([id_juego])
+REFERENCES [dbo].[juegos] ([id_juego])
+GO
+ALTER TABLE [dbo].[compras]  WITH CHECK ADD  CONSTRAINT [FK__compras__id_usua__30F848ED] FOREIGN KEY([id_usuario])
+REFERENCES [dbo].[usuarios] ([id_usuario])
+GO
+ALTER TABLE [dbo].[compras] CHECK CONSTRAINT [FK__compras__id_usua__30F848ED]
+GO
+ALTER TABLE [dbo].[favoritos]  WITH CHECK ADD  CONSTRAINT [FK_favoritos_juegos] FOREIGN KEY([id_juego])
+REFERENCES [dbo].[juegos] ([id_juego])
+GO
+ALTER TABLE [dbo].[favoritos] CHECK CONSTRAINT [FK_favoritos_juegos]
+GO
+ALTER TABLE [dbo].[favoritos]  WITH CHECK ADD  CONSTRAINT [FK_favoritos_usuarios] FOREIGN KEY([id_usuario])
+REFERENCES [dbo].[usuarios] ([id_usuario])
+GO
+ALTER TABLE [dbo].[favoritos] CHECK CONSTRAINT [FK_favoritos_usuarios]
+GO
+ALTER TABLE [dbo].[imagenes]  WITH CHECK ADD  CONSTRAINT [FK_imagenes_juegos] FOREIGN KEY([id_juego])
+REFERENCES [dbo].[juegos] ([id_juego])
+GO
+ALTER TABLE [dbo].[imagenes] CHECK CONSTRAINT [FK_imagenes_juegos]
+GO
+ALTER TABLE [dbo].[juegos_categorias]  WITH CHECK ADD FOREIGN KEY([id_categoria])
+REFERENCES [dbo].[categorias] ([id_categoria])
+GO
+ALTER TABLE [dbo].[juegos_categorias]  WITH CHECK ADD FOREIGN KEY([id_juego])
+REFERENCES [dbo].[juegos] ([id_juego])
+GO
+USE [master]
+GO
+ALTER DATABASE [TIENDAVIRTUAL] SET  READ_WRITE 
+GO

@@ -1,0 +1,6 @@
+﻿.head {
+    display: block;
+    z-index: 500;
+    max-width: 1026px;
+    margin: auto;
+}

@@ -1,0 +1,21 @@
+﻿@using ProyectoNugetVirtualStore.Models;
+@model List<Juegos>
+
+@{
+    Decimal precio = 0;
+}
+
+<h1>Pedido</h1>
+
+
+@foreach (Juegos juegos in Model)
+{
+    <h1>@juegos.NombreJuego :  @juegos.PrecioJuego</h1>
+    {
+        precio += juegos.PrecioJuego;
+    }
+}
+
+<h2>Precio total:</h2>
+<h2>@precio €</h2>
+
